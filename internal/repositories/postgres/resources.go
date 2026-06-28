@@ -12,15 +12,15 @@ import (
 )
 
 type Notification struct {
-	ID         uuid.UUID       `db:"id"`
-	UserID     int             `db:"user_id"`
-	Type       string          `db:"type"`
-	Payload    *Payload        `db:"-"`
-	RawPayload json.RawMessage `db:"payload"`
 	SendAt     time.Time       `db:"send_at"`
-	Status     string          `db:"status"`
-	TriesCount int             `db:"tries_count"`
+	Payload    *Payload        `db:"-"`
 	StartedAt  *sql.NullString `db:"started_at"`
+	Type       string          `db:"type"`
+	Status     string          `db:"status"`
+	RawPayload json.RawMessage `db:"payload"`
+	UserID     int             `db:"user_id"`
+	TriesCount int             `db:"tries_count"`
+	ID         uuid.UUID       `db:"id"`
 }
 
 type Payload struct {

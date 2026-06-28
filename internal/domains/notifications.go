@@ -29,19 +29,19 @@ type NotificationsRepo interface {
 }
 
 type Notification struct {
-	ID         uuid.UUID
-	UserID     int
-	Type       string
-	Payload    *Payload
-	RawPayload []byte
 	SendAt     time.Time
+	Payload    *Payload
+	Type       string
 	Status     string
+	RawPayload []byte
+	UserID     int
+	ID         uuid.UUID
 }
 
 type Payload struct {
+	ShippingAddress string    `json:"shipping_address"`
 	OrderID         uuid.UUID `json:"order_id"`
 	PaymentID       uuid.UUID `json:"payment_id"`
-	ShippingAddress string    `json:"shipping_address"`
 }
 
 func (n *Notification) GetTitleAndText() (string, string, error) {

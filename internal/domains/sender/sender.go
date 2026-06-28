@@ -14,13 +14,10 @@ import (
 
 type Sender struct {
 	ctx               context.Context
+	notificationsRepo domains.NotificationsRepo
+	r                 *rand.Rand
 	retryCount        int
 	minDelay          time.Duration
-	notificationsRepo domains.NotificationsRepo
-	r                 *rand.Rand // for error emulating
-	// Email integration
-	// SMS integration
-	// Push integration
 }
 
 func NewSender(

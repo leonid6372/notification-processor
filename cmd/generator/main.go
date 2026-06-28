@@ -68,11 +68,11 @@ func main() {
 }
 
 type Stat struct {
+	StartedAt  time.Time
+	FinishedAt time.Time
 	Total      int
 	Correct    int
 	BrokenJSON int
-	StartedAt  time.Time
-	FinishedAt time.Time
 }
 
 func generateAndProduce(count int, producer *kafka.AsyncProducer) *Stat {

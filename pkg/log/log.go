@@ -25,10 +25,9 @@ func init() {
 }
 
 type logger struct {
-	logLevel    zapcore.Level
-	logEncoding string
-
 	*zap.Logger
+	logEncoding string
+	logLevel    zapcore.Level
 }
 
 func newLogger(logLevel zapcore.Level, encoding string) *logger {

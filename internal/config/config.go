@@ -28,11 +28,11 @@ type Sender struct {
 
 type Postgres struct {
 	Host     string `yaml:"host"`
-	Port     int    `yaml:"port"`
 	Schema   string `yaml:"schema"`
 	Username string `yaml:"username"`
 	Password string `yaml:"password"`
 	Database string `yaml:"database"`
+	Port     int    `yaml:"port"`
 }
 
 func (c *Config) GetPostgresURL() string {
@@ -42,9 +42,9 @@ func (c *Config) GetPostgresURL() string {
 
 type Kafka struct {
 	Host      string `yaml:"host"`
-	Port      int    `yaml:"port"`
 	Topic     string `yaml:"topic"`
 	GroupID   string `yaml:"group_id"`
+	Port      int    `yaml:"port"`
 	BatchSize int    `yaml:"batch_size"` // commit messages to kafka every X messages
 }
 
