@@ -30,7 +30,7 @@ type NotificationsRepo interface {
 
 type Notification struct {
 	ID         uuid.UUID
-	UserID     uuid.UUID
+	UserID     int
 	Type       string
 	Payload    *Payload
 	RawPayload []byte
@@ -48,16 +48,16 @@ func (n *Notification) GetTitleAndText() (string, string, error) {
 	switch n.Type {
 	case NotificationTypeOrderCreated:
 		text := fmt.Sprintf("Your order %s has been created successfully.", n.Payload.OrderID)
-
 		return "Order Created", text, nil
+
 	case NotificationTypePaymentReceived:
 		text := fmt.Sprintf("We have received your payment %s.", n.Payload.PaymentID)
-
 		return "Payment Received", text, nil
+
 	case NotificationTypeOrderShipped:
 		text := fmt.Sprintf("Your order %s has been shipped in %s.", n.Payload.OrderID, n.Payload.ShippingAddress)
-
 		return "Order Shipped", text, nil
+
 	default:
 		return "", "", errs.NewStack(fmt.Errorf("invalid notification type: %s id: %s", n.Type, n.ID))
 	}

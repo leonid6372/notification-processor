@@ -15,7 +15,7 @@ const callerSkip = 8
 var l *logger
 
 func init() {
-	l = newLogger(zapcore.InfoLevel, "console") // "json" or "console"
+	l = newLogger(zapcore.DebugLevel, "console") // "json" or "console"
 
 	zap.ReplaceGlobals(l.Logger)
 

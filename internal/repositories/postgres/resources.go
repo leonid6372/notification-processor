@@ -1,6 +1,7 @@
 package postgres
 
 import (
+	"database/sql"
 	"encoding/json"
 	"time"
 
@@ -11,15 +12,15 @@ import (
 )
 
 type Notification struct {
-	ID         uuid.UUID        `db:"id"`
-	UserID     uuid.UUID        `db:"user_id"`
-	Type       string           `db:"type"`
-	Payload    *Payload         `db:"-"`
-	RawPayload *json.RawMessage `db:"payload"`
-	SendAt     time.Time        `db:"send_at"`
-	Status     string           `db:"status"`
-	TriesCount int              `db:"tries_count"`
-	StartedAt  string           `db:"started_at"`
+	ID         uuid.UUID       `db:"id"`
+	UserID     int             `db:"user_id"`
+	Type       string          `db:"type"`
+	Payload    *Payload        `db:"-"`
+	RawPayload json.RawMessage `db:"payload"`
+	SendAt     time.Time       `db:"send_at"`
+	Status     string          `db:"status"`
+	TriesCount int             `db:"tries_count"`
+	StartedAt  *sql.NullString `db:"started_at"`
 }
 
 type Payload struct {
@@ -31,8 +32,8 @@ type Payload struct {
 func (n *Notification) ToDomain() (*domains.Notification, error) {
 	payload := new(domains.Payload)
 
-	if n.Payload != nil {
-		if err := json.Unmarshal(*n.RawPayload, &n.Payload); err != nil {
+	if n.RawPayload != nil {
+		if err := json.Unmarshal(n.RawPayload, &n.Payload); err != nil {
 			return nil, errs.NewStack(err)
 		}
 

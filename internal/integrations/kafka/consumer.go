@@ -29,8 +29,14 @@ func NewKafkaConsumer(ctx context.Context, brokers []string, groupID string) (*C
 
 func (c *Consumer) Start(ctx context.Context, topics []string, handler sarama.ConsumerGroupHandler) {
 	for {
-		if err := c.group.Consume(ctx, topics, handler); err != nil {
-			log.Error("kafka consume failed", zap.Error(err))
+		select {
+		case <-ctx.Done():
+			return
+
+		default:
+			if err := c.group.Consume(ctx, topics, handler); err != nil {
+				log.Error("kafka consume failed", zap.Error(err))
+			}
 		}
 	}
 }

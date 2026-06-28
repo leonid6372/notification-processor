@@ -22,7 +22,9 @@ func NewNotificationsRepo(pool *pgxpool.Pool) domains.NotificationsRepo {
 }
 
 func (n *notificationsRepo) CreateNotification(ctx context.Context, notification *domains.Notification) error {
-	query := `INSERT INTO notifications (id, user_id, type, payload, send_at) VALUES ($1, $2, $3, $4, $5)`
+	query := `INSERT INTO notifications (id, user_id, type, payload, send_at)
+			VALUES ($1, $2, $3, $4, $5)
+			ON CONFLICT (id) DO NOTHING`
 
 	_, err := n.psql.Exec(
 		ctx,
@@ -42,7 +44,7 @@ func (n *notificationsRepo) CreateNotification(ctx context.Context, notification
 
 func (n *notificationsRepo) GetNotificationsToSend(ctx context.Context, limit int) ([]*domains.Notification, error) {
 	query := `UPDATE notifications
-			SET status = 'in_progress', tries_count = tries_count + 1, started_at = NOW()
+			SET status = 'in_progress', tries_count = notifications.tries_count + 1, started_at = NOW()
 			WHERE id IN (
 						SELECT id
 						FROM notifications
@@ -62,7 +64,16 @@ func (n *notificationsRepo) GetNotificationsToSend(ctx context.Context, limit in
 	for rows.Next() {
 		notification := new(Notification)
 
-		err := rows.Scan(notification)
+		err := rows.Scan(
+			&notification.ID,
+			&notification.UserID,
+			&notification.Type,
+			&notification.RawPayload,
+			&notification.SendAt,
+			&notification.Status,
+			&notification.TriesCount,
+			&notification.StartedAt,
+		)
 		if err != nil {
 			return nil, errs.NewStack(err)
 		}

@@ -29,6 +29,7 @@ func NewScheduler(
 		sender:             sender,
 		notificationsRepo:  notificationsRepo,
 		notificationsCh:    make(chan *domains.Notification),
+		doneCh:             make(chan struct{}),
 		notificationsLimit: cfg.Scheduler.BatchSize,
 		workersCount:       cfg.Scheduler.WorkersCount,
 		taskTimeout:        cfg.Scheduler.TaskTimeout,
@@ -58,6 +59,8 @@ func (s *Scheduler) StartSendings(ctx context.Context) {
 				s.notificationsCh <- notification
 			}
 
+			log.Debug("scheduler sending iteration complete", zap.Int("count", len(notifications)))
+
 			time.Sleep(10 * time.Second)
 		}
 	}
@@ -80,6 +83,8 @@ func (s *Scheduler) StartCleaning(ctx context.Context) {
 			if err := s.notificationsRepo.ResetZombieNotifications(ctx, s.taskTimeout); err != nil {
 				log.Error("failed to reset zombie notifications", zap.Error(err))
 			}
+
+			log.Debug("scheduler cleaning iteration complete")
 
 			time.Sleep(60 * time.Second)
 		}

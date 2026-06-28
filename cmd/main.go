@@ -25,13 +25,13 @@ func main() {
 
 	<-done
 
+	cancel()
+
 	app.Stop()
 
 	if err := log.Sync(); err != nil {
 		log.Error("log sync failed", zap.Error(err))
 	}
-
-	cancel()
 
 	log.Info("notification-processor shut down complete")
 }

@@ -69,6 +69,15 @@ func (s *Sender) StartSenderWorker(input <-chan *domains.Notification, done chan
 					zap.String("id", notification.ID.String()),
 					zap.Error(emailErr),
 				)
+			} else {
+				log.Info(
+					"send notification successfully",
+					zap.String("id", string(notification.ID.String())),
+					zap.String("type", notification.Type),
+					zap.String("send_by", "email"),
+					zap.String("title", title),
+					zap.String("text", text),
+				)
 			}
 
 			pushErr := s.doWithRetry(func() error {
@@ -79,6 +88,15 @@ func (s *Sender) StartSenderWorker(input <-chan *domains.Notification, done chan
 					"failed to send push notification",
 					zap.String("id", notification.ID.String()),
 					zap.Error(pushErr),
+				)
+			} else {
+				log.Info(
+					"send notification successfully",
+					zap.String("id", string(notification.ID.String())),
+					zap.String("type", notification.Type),
+					zap.String("send_by", "push"),
+					zap.String("title", title),
+					zap.String("text", text),
 				)
 			}
 
@@ -124,6 +142,15 @@ func (s *Sender) StartSenderWorker(input <-chan *domains.Notification, done chan
 						zap.Error(err),
 					)
 				}
+			} else {
+				log.Info(
+					"send notification successfully",
+					zap.String("id", string(notification.ID.String())),
+					zap.String("type", notification.Type),
+					zap.String("send_by", "email"),
+					zap.String("title", title),
+					zap.String("text", text),
+				)
 			}
 
 			if err := s.notificationsRepo.UpdateNotificationStatus(
@@ -146,6 +173,15 @@ func (s *Sender) StartSenderWorker(input <-chan *domains.Notification, done chan
 					zap.String("id", notification.ID.String()),
 					zap.Error(pushErr),
 				)
+			} else {
+				log.Info(
+					"send notification successfully",
+					zap.String("id", string(notification.ID.String())),
+					zap.String("type", notification.Type),
+					zap.String("send_by", "push"),
+					zap.String("title", title),
+					zap.String("text", text),
+				)
 			}
 
 			smsErr := s.doWithRetry(func() error {
@@ -156,6 +192,15 @@ func (s *Sender) StartSenderWorker(input <-chan *domains.Notification, done chan
 					"failed to send sms notification",
 					zap.String("id", notification.ID.String()),
 					zap.Error(smsErr),
+				)
+			} else {
+				log.Info(
+					"send notification successfully",
+					zap.String("id", string(notification.ID.String())),
+					zap.String("type", notification.Type),
+					zap.String("send_by", "sms"),
+					zap.String("title", title),
+					zap.String("text", text),
 				)
 			}
 

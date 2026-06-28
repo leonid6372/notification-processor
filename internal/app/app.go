@@ -55,7 +55,7 @@ func Initialize(ctx context.Context) *App {
 	log.Info("init kafka consumer...")
 
 	consumer, err := kafka.NewKafkaConsumer(
-		ctx, []string{fmt.Sprintf("%s:%d", cfg.Postgres.Host, cfg.Postgres.Port)}, cfg.Kafka.GroupID,
+		ctx, []string{fmt.Sprintf("%s:%d", cfg.Kafka.Host, cfg.Kafka.Port)}, cfg.Kafka.GroupID,
 	)
 	if err != nil {
 		log.Fatal("kafka init failed", zap.Error(err))
