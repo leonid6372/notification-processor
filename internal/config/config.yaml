@@ -1,3 +1,12 @@
+scheduler:
+  batch_size: 100
+  workers_count: 5
+  task_timeout: 300s
+
+sender:
+  retry_count: 3
+  min_delay: 2s
+
 postgres:
   host: localhost
   port: 5432
@@ -10,4 +19,5 @@ kafka:
   host: localhost
   port: 9092
   topic: notifications
-  consumer_group: notifications_cg
+  group_id: notification-service
+  batch_size: 100
