@@ -176,18 +176,3 @@ go run cmd/processor/main.go
 # 4. (Optional) Send test events
 go run cmd/generator/main.go
 ```
-
----
-
-## Contributing
-
-This is a coding challenge task. Please follow the requirements and include:
-
-- Complete working code
-- Database schema
-- Test data
-- Instructions to run
-
----
-
-**Good luck! 🚀**
