@@ -14,8 +14,6 @@ A production-ready **Go microservice** that consumes user action events from Kaf
 - [Requirements](#requirements)
 - [Failure Simulation](#failure-simulation)
 - [Getting Started](#getting-started)
-- [Testing](#testing)
-- [Time Estimate](#time-estimate)
 
 ---
 
