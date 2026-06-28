@@ -6,7 +6,7 @@
 
 version: '3'
 networks:
-  local-kafka:
+  local-network:
     driver: bridge
 
 services:
@@ -14,7 +14,7 @@ services:
     image: confluentinc/cp-zookeeper:7.0.1
     container_name: zookeeper
     networks:
-      - local-kafka
+      - local-network
     environment:
       ZOOKEEPER_CLIENT_PORT: 2181
       ZOOKEEPER_TICK_TIME: 2000
@@ -23,7 +23,7 @@ services:
     image: confluentinc/cp-kafka:7.0.1
     container_name: broker
     networks:
-      - local-kafka
+      - local-network
     ports:
     # To learn about configuring Kafka for access across networks see
     # https://www.confluent.io/blog/kafka-client-cannot-connect-to-broker-on-aws-on-docker-etc/
@@ -46,7 +46,7 @@ services:
     image: provectuslabs/kafka-ui
     container_name: kafka-ui
     networks:
-      - local-kafka
+      - local-network
     depends_on: 
       - broker
     ports:
@@ -56,3 +56,22 @@ services:
       - KAFKA_CLUSTERS_0_NAME=broker
       - KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS=broker:9093
       - KAFKA_CLUSTERS_0_ZOOKEEPER=zookeeper:2181
+
+  postgres:
+    image: postgres:latest
+    container_name: postgres
+    networks:
+      - local-network
+    restart: always
+    environment:
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=1111
+      - POSTGRES_DB=notification-processor
+    ports:
+      - 5432:5432 
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U admin -d notification-processor"]
+      interval: 10s
+      retries: 5
+      start_period: 30s
+      timeout: 10s

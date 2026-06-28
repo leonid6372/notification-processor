@@ -6,10 +6,7 @@ import (
 	"os/signal"
 	"syscall"
 
-	"go.uber.org/zap"
-
 	"github.com/leonid6372/notification-processor/internal/app"
-	"github.com/leonid6372/notification-processor/pkg/log"
 )
 
 func main() {
@@ -28,10 +25,4 @@ func main() {
 	cancel()
 
 	app.Stop()
-
-	if err := log.Sync(); err != nil {
-		log.Error("log sync failed", zap.Error(err))
-	}
-
-	log.Info("notification-processor shut down complete")
 }

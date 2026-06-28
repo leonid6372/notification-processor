@@ -33,7 +33,7 @@ func Initialize(ctx context.Context) *App {
 
 	var configPath string
 
-	flag.StringVar(&configPath, "config", "config.yaml", "bot config path")
+	flag.StringVar(&configPath, "config", "config.yaml", "notification-processor config path")
 	flag.Parse()
 
 	cfg := config.GetConfig(configPath)
@@ -58,7 +58,7 @@ func Initialize(ctx context.Context) *App {
 		ctx, []string{fmt.Sprintf("%s:%d", cfg.Kafka.Host, cfg.Kafka.Port)}, cfg.Kafka.GroupID,
 	)
 	if err != nil {
-		log.Fatal("kafka init failed", zap.Error(err))
+		log.Fatal("kafka consumer init failed", zap.Error(err))
 	}
 
 	log.Info("init sender...")
@@ -100,4 +100,6 @@ func (a *App) Stop() {
 	a.Scheduler.WaitToStopSending()
 
 	a.pool.Close()
+
+	log.Info("notification-processor shut down complete")
 }

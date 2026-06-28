@@ -61,7 +61,7 @@ func (s *Scheduler) StartSendings(ctx context.Context) {
 
 			log.Debug("scheduler sending iteration complete", zap.Int("count", len(notifications)))
 
-			time.Sleep(10 * time.Second)
+			time.Sleep(1 * time.Second)
 		}
 	}
 }
