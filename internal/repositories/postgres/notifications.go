@@ -60,7 +60,7 @@ func (n *notificationsRepo) GetNotificationsToSend(ctx context.Context, limit in
 	}
 	defer rows.Close()
 
-	notifications := make([]*domains.Notification, 0)
+	notifications := make([]*domains.Notification, 0, limit)
 	for rows.Next() {
 		notification := new(Notification)
 
